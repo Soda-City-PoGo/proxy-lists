@@ -1,6 +1,0 @@
-
-                        var b = '881.222'.split('').reverse().join('');
-                        var yy = '.10.1';
-                        var pp = -21646 + 22726;
-                        document.write('<a href="/' + b + yy + '/' + pp + '#socks4" title="">' + b + yy + String.fromCharCode(58) + pp + '</a>');
-                        proxies.push(b + yy + String.fromCharCode(58) + pp);

@@ -1,6 +1,0 @@
-
-            var p = '1.631.312'.split('').reverse().join('');
-            var yy = '05.62';
-            var pp = -32784 + 35912;
-            document.write('<a href="/' + p + yy + '/' + pp + '#http" title="lsocit-213.136.105.62.aviso.ci">' + p + yy + String.fromCharCode(58) + pp + '</a>');
-            proxies.push(p + yy + String.fromCharCode(58) + pp);

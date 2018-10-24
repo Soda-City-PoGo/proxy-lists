@@ -1,5 +1,12 @@
 # Changelog
 
+* v1.16.0:
+  * Fixed-up several sources, getting anonymityLevel and protocols where possible.
+* v1.15.0:
+  * Upgraded dependencies
+  * Fixed sources: hidemyname (formerly incloak), premproxy, proxydb
+  * Now using [data-sourcer](https://github.com/chill117/data-sourcer) for managing sources
+  * Cleaner CLI usage: Write log messages to proxy-lists.log file.
 * v1.14.1:
   * Fix for regression in CLI
 * v1.14.0:

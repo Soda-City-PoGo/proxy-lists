@@ -2,42 +2,41 @@
 
 var _ = require('underscore');
 
-var convert = {
-	anonymityLevels: {
-		'Anonymous': 'anonymous',
-		'No': 'transparent',
-	},
+var anonymityLevels = {
+	'No': 'transparent',
+	'Medium': 'anonymous',
+	'High': 'elite',
 };
 
 module.exports = {
-	homeUrl: 'https://www.cool-proxy.net/',
+	homeUrl: 'https://hidemyna.me/',
 	defaultOptions: {
 		numPagesToScrape: 10,
 	},
 	abstract: 'scraper-paginated-list',
 	config: {
-		startPageUrl: 'https://www.cool-proxy.net/proxies/http_proxy_list',
+		startPageUrl: 'https://hidemyna.me/en/proxy-list',
 		selectors: {
-			item: '#main table tbody tr',
+			item: '.proxy__t tbody tr',
 			itemAttributes: {
 				ipAddress: 'td:nth-child(1)',
 				port: 'td:nth-child(2)',
+				protocols: 'td:nth-child(5)',
 				anonymityLevel: 'td:nth-child(6)',
 			},
-			nextLink: '#main table .pagination span.current + span a',
+			nextLink: '.proxy__pagination .is-active + li a',
 		},
 		parseAttributes: {
-			ipAddress: function(ipAddress) {
-				var match = ipAddress.match(/([^)]+)$/);
-				return match && match[1] || null;
-			},
 			port: function(port) {
 				port = parseInt(port);
 				if (_.isNaN(port)) return null;
 				return port;
 			},
+			protocols: function(protocols) {
+				return [protocols.trim().toLowerCase()];
+			},
 			anonymityLevel: function(anonymityLevel) {
-				return anonymityLevel && convert.anonymityLevels[anonymityLevel.trim()] || null;
+				return anonymityLevels[anonymityLevel.trim()] || null;
 			},
 		},
 	},

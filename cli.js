@@ -10,6 +10,7 @@ var pkg = JSON.parse(fs.readFileSync(__dirname + '/package.json'));
 var ProxyLists = require('./index');
 var validOutputFormats = ['json', 'csv', 'txt'];
 var proxyFieldNames = ['source', 'ipAddress', 'port', 'country', 'protocols', 'anonymityLevel'];
+var sourceNames = ProxyLists.getSourceNames();
 
 function list(value) {
 	return value.split(',');
@@ -57,13 +58,13 @@ program
 	)
 	.option(
 		'-s, --sources-white-list <list>',
-		'Get proxies from these sources only [' + _.keys(ProxyLists._sources).join(', ') + ']',
+		'Get proxies from these sources only [' + sourceNames.join(', ') + ']',
 		list,
 		null
 	)
 	.option(
 		'-x, --sources-black-list <list>',
-		'Do not get proxies from these sources [' + _.keys(ProxyLists._sources).join(', ') + ']',
+		'Do not get proxies from these sources [' + sourceNames.join(', ') + ']',
 		list,
 		null
 	)
@@ -116,8 +117,6 @@ program
 			writeStream = fs.createWriteStream(outputFile);
 		} else {
 			outputFile = 'STDOUT';
-			var logFile = process.cwd() + '/' + this.logFile;
-			var logStream = fs.createWriteStream(logFile);
 			writeStream = {
 				write: function(data) {
 					process.stdout.write(data + '\n');
@@ -127,16 +126,12 @@ program
 			};
 		}
 
+		var logFile = process.cwd() + '/' + this.logFile;
+		var logStream = fs.createWriteStream(logFile);
 		function log(message) {
-
-			if (stdout) {
-				logStream.write(message + '\n');
-			} else {
-				console.log(message);
-			}
+			logStream.write(message + '\n');
 		}
 
-		writeStream.on('error', console.error.bind(console));
 		var numWriting = 0;
 		var wroteData = false;
 		var ended = false;
@@ -251,10 +246,11 @@ program
 			'ipTypes'
 		]);
 
-		var gettingProxies = ProxyLists.getProxies(options);
-		gettingProxies.on('data', onData);
-		gettingProxies.on('error', onError);
-		gettingProxies.on('end', onEnd);
+		ProxyLists.getProxies(options)
+			.on('data', onData)
+			.on('error', onError)
+			.once('end', onEnd);
+
 		startOutput();
 	});
 
